@@ -21,6 +21,8 @@ class Content(models.Model):
 	image = models.ImageField(null=True, blank=True, upload_to='images')
 	rate = models.IntegerField()
 
+	def __str__(self):
+		return self.title
 
 class SpecificContent(models.Model):
 	content = models.ForeignKey(Content, on_delete=models.CASCADE)
@@ -30,6 +32,8 @@ class SpecificContent(models.Model):
 	end_time = models.DateTimeField()
 	#여기 어떻게 할지 고민
 
+	def __str__(self):
+		return str(self.content) + str(self.date) + str(self.start_time)
 
 class Seat(models.Model):
 	TYPE_OF_SEAT = [

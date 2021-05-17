@@ -4,7 +4,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from contents.serializers import ContentSerializer
 from rest_framework import status
+from django.http import Http404
 #이 부분 확인 
+
+#detailview
+#개인스케줄 비교 
+#친구랑 스케줄 비교 
+#취향 반영 스케줄
+
 
 class ContentList(APIView):
 	def get(self, request, format=None):
@@ -27,3 +34,16 @@ class AddContent(APIView):
 		##save 란 함수안에 create가 이미 들어있어서 데이터베이스에 자동으로 저장됨
 		else:
 			return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class ContentDetail(APIView):
+	def get_object(self, pk):
+		try:
+			return Content.objects.get(pk=pk)
+		except Content.DoesNotExist:
+			raise Http404
+	
+	def get(self, request, pk, format=None):
+		content = self.get_object(pk)
+		serializer = ContentSerializer(content)
+		return Response(serializer.data)

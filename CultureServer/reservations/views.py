@@ -14,4 +14,10 @@ class ReservationList(APIView):
 		##get 은 하나만, filter 는 여러개 
 		serializer = ReservationSerializer(reservations, many=True)
 		return Response(serializer.data)
+
+#프론트에서 시간, 날짜 등 선택해서 보내주면 그걸 addreservation 에서 돌리기 
+#프론트에서 정보 넘겨주면 - 애드 로직 
+#delete reservation 
+#같이 갈 친구 추가 
+
 		

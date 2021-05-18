@@ -5,6 +5,7 @@ class ReservationSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Reservation
 		fields = [
+			'pk',
 			'reserver',
 			'others',
 			'specific_content',

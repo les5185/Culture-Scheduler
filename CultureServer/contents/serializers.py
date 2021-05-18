@@ -5,6 +5,7 @@ class ContentSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Content
 		fields = [
+			'pk',
 			'title',
 			'genre',
 			'cast',

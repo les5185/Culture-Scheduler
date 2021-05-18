@@ -5,13 +5,14 @@ from rest_framework.response import Response
 from contents.serializers import ContentSerializer
 from rest_framework import status
 from django.http import Http404
+from schedulers.models import Scheduler
 #이 부분 확인 
 
 #detailview
 #개인스케줄 비교 
+#specific content 정보 받아오는 것 
 #친구랑 스케줄 비교 
 #취향 반영 스케줄
-
 
 class ContentList(APIView):
 	def get(self, request, format=None):

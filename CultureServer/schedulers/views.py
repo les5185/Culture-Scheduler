@@ -2,8 +2,10 @@ from django.shortcuts import render
 from schedulers.models import Scheduler
 from users.models import User
 from schedulers.serializers import SchedulerSerializer
-from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from django.http import Http404
 # Create your views here.
 
 
@@ -27,3 +29,41 @@ class ScheduleList(APIView):
 		schedules = Scheduler.objects.filter(user=user)
 		serializer = SchedulerSerializer(schedules, many=True)
 		return Response(serializer.data)
+
+
+class AddSchedule(APIView):
+	def post(self, request, format=None):
+		data = request.data
+		serializer = SchedulerSerializer(data=data)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data, status=status.HTTP_201_CREATED)
+		else:
+			return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class ScheduleDetail(APIView):
+	def get_object(self, pk):
+		try:
+			return Scheduler.objects.get(pk=pk)
+		except Scheduler.DoesNotExist:
+			raise Http404
+	
+	def get(self, request, pk, format=None):
+		schedule = self.get_object(pk)
+		serializer = SchedulerSerializer(schedule)
+		return Response(serializer.data)
+
+
+	def put(self, request, pk, format=None):
+		schedule = self.get_object(pk)
+		serializer = SchedulerSerializer(schedule, data=request.data)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data)
+		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+	def delete(self, request, pk, format=None):
+		schedule = self.get_object(pk)
+		schedule.delete()
+		return Response(status=status.HTTP_200_OK)

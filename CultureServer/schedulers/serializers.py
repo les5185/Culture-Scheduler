@@ -5,6 +5,7 @@ class SchedulerSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Scheduler
 		fields = [
+			'pk',
 			'user',
 			'date',
 			'start_time',

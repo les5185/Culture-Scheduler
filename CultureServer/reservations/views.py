@@ -14,6 +14,16 @@ class ReservationList(APIView):
 		serializer = ReservationSerializer(reservations, many=True)
 		return Response(serializer.data)
 
+class AddReservation(APIView):
+	def post(self, request, format=None):
+		data = request.data
+		serializer = ReservationSerializer(data=data)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data, status=status.HTTP_201_CREATED)
+		else:
+			return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 '''add할때 친구를 추가해서 넘겨줘야하고 delete 추가
 
 

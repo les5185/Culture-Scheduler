@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework_jwt.settings import api_settings
-from users.models import User
+from users.models import User, Friend
 
 class UserSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -31,3 +31,14 @@ class UserSerializerWithToken(serializers.ModelSerializer):
 	class Meta:
 		model = User
 		fields = ('token', 'username', 'password', 'first_name', 'last_name', 'email', 'gender', 'birth', 'contact', 'preference')
+
+
+class FriendSerializer(serializers.ModelSerializer):
+	user = UserSerializer(read_only=True, many=True)
+
+	class Meta:
+		model = Friend
+		fields = (
+			'users',
+			'current_user'
+		)

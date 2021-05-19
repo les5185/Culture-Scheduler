@@ -12,7 +12,12 @@ from schedulers.models import Scheduler
 #개인스케줄 비교 
 #specific content 정보 받아오는 것 
 #친구랑 스케줄 비교 
-#취향 반영 스케줄
+#취향 반영 스케줄 - filter, schedule 가져와서 비교, 필터로 가쟈온다음 데이터랑 비교해서 남는거 다 필터 
+#content search 도 검색하면 데이터로 보내서 이름을 필터링 
+#content search
+
+#object.filter 로직 
+#many-to-many serializer -> django documentation 찾아보기  
 
 class ContentList(APIView):
 	def get(self, request, format=None):

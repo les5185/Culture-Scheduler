@@ -8,16 +8,41 @@ class User(AbstractUser):
 	)
 
 	TYPE_OF_PREFERENCE = (
-		('뮤지컬', '뮤지컬'),
-		('연극', '연극'),
-		('전시회', '전시회'),
-		('강연', '강연'),
+		('유쾌한', '유쾌한'),
+		('감동적인', '감동적인'),
+		('스릴있는', '스릴있는'),
+		('어두운', '어두운'),
+		('힐링', '힐링'),
+		('설레는', '설레는'),
+		('잔잔한', '잔잔한'),
+		('역동적인', '역동적인'),
+		('유익한', '유익한'),
+		('사진 찍기 좋은', '사진 찍기 좋은'),
+		('장르물', '장르물'),
+		('온택트', '온택트'),
+	)
+
+	TYPE_OF_PREFERENCE_2 = (
+		('유쾌한', '유쾌한'),
+		('감동적인', '감동적인'),
+		('스릴있는', '스릴있는'),
+		('어두운', '어두운'),
+		('힐링', '힐링'),
+		('설레는', '설레는'),
+		('잔잔한', '잔잔한'),
+		('역동적인', '역동적인'),
+		('유익한', '유익한'),
+		('사진 찍기 좋은', '사진 찍기 좋은'),
+		('장르물', '장르물'),
+		('온택트', '온택트'),
 	)
 
 	contact = models.CharField(verbose_name='휴대폰 번호', max_length=15)
 	birth = models.DateField(verbose_name='생년월일', blank=True, null=True)
 	gender = models.CharField(verbose_name='성별', max_length=5, choices=TYPE_OF_GENDER)
-	preference = models.CharField(verbose_name='취향', max_length=5, choices=TYPE_OF_PREFERENCE)
+	preference1 = models.CharField(verbose_name='취향', max_length=5, choices=TYPE_OF_PREFERENCE)
+	preference2 = models.CharField(verbose_name='취향', max_length=5, choices=TYPE_OF_PREFERENCE_2)
+	
 	
 	def __str__(self):
 		return self.username

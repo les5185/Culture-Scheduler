@@ -6,14 +6,17 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from users.serializers import UserSerializer, UserSerializerWithToken, FriendSerializer
 
+'''
+유저 모델 키워드 추가했기 때문에 syncdb 해야하고, 모델 수정했기 때문에 migration다시 필요함 
+'''
+#유저 view 전체 완료 
+#로그인 - 완료 
+#회원가입 - 완료 
+#프론트에서 폼으로 데이터 넘어오고 회원가입은 취향/생일 등 저장 - 완료 
+# 친구 username로 검색 - 완료 
+#친구 추가/요청 - username 혹은 email 로 추가 - 완료 (?)
+#친구 수락.......안해도되려나....
 
-# Create your views here.
-
-#로그인 
-#회원가입 
-#프론트에서 폼으로 데이터 넘어오고 회원가입은 취향/생일 등 저장
-# 친구 username 및 email 로 검색 
-#친구 추가 - username 혹은 email 로 추가 
 
 @api_view(['GET'])
 def current_user(request):
@@ -39,7 +42,7 @@ class UserList(APIView): ## 회원가입
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class SearchUser(APIView): ##use this method to content search
+class SearchUser(APIView): 
 	def get(self, request, format=None):
 		results = User.objects.filter(username__icontains=request.GET['text'])
 		serializer = UserSerializer(results, many=True)

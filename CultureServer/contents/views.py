@@ -1,27 +1,33 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from contents.models import Content
+from schedulers.models import Scheduler
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from contents.serializers import ContentSerializer
+from schedulers.serializers import SchedulerSerializer
 from rest_framework import status
 from django.http import Http404
-from schedulers.models import Scheduler
-#이 부분 확인 
 
-#detailview
 
+#detailview - 완료(?)
 
 #개인스케줄 비교 
 #specific content 정보 받아오는 것 
 #친구랑 스케줄 비교 
 #취향 반영 스케줄 - filter, schedule 가져와서 비교, 필터로 가쟈온다음 데이터랑 비교해서 남는거 다 필터 
 
-#content search 도 검색하면 데이터로 보내서 이름을 필터링 
-#content search
-#filter갖고 테마에 따라 보여주는것 
-
-#object.filter 로직 
-#many-to-many serializer -> django documentation 찾아보기  
+#content search - 완료 
+#filter갖고 테마에 따라 보여주는것, object.filter 로직 
+'''
+class CompareSchedule(APIView):
+	def get(self, request, format=None):
+		schedules = Schedule.objects.all()
+		serializer = ScheduleSerializer(schedules, many=True)
+		return Response(serializer.data)
+	
+	def save_compare(request, pk):
+		available_content = request.session.get('comparing_your_schedules', [])
+		available_content'''
 
 class ContentList(APIView):
 	def get(self, request, format=None):
@@ -29,7 +35,7 @@ class ContentList(APIView):
 		##데이터베이스(엑셀 테이블)에서 데이터를 가져온 것. 
 		## queryset이라는 형태로 저장이 되는데 이건 API 상태가 아니라서 
 		serializer = ContentSerializer(contents, many=True)
-		##serializer 가 query set 을 API 형태로 만들어준다.
+		##serializer 가 query set 을 API 형태로 만들어줌
 		return Response(serializer.data)
 		##response 자체가 API 가 되는 것
 
@@ -40,10 +46,25 @@ class AddContent(APIView):
 		if serializer.is_valid():
 			serializer.save()
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
-		##serializer는 json api로 날라온걸 query set 으로 바꿔줄때도 쓰인다
-		##save 란 함수안에 create가 이미 들어있어서 데이터베이스에 자동으로 저장됨
+		##serializer는 json api로 날라온걸 query set 으로 바꿔줄때도 쓰임
+		##save: 함수안에 create가 이미 들어있어서 데이터베이스에 자동으로 저장됨
 		else:
 			return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+#filter by cateogry 확인 
+class ContentCategory(APIView):
+	serializer_class = ContentSerializer
+
+	def get_queryset(self):
+		category = self.request.query_params.get('category')
+		return Content.objects.filter(genre__parent__category=category)
+	
+
+class SearchContent(APIView):
+	def get(self, request, format=None):
+		results = Content.objects.filter(title__icontains=request.GET['text'])
+		serializer = ContentSerializer(results, many=True)
+		return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class ContentDetail(APIView):

@@ -4,7 +4,6 @@ from schedulers.models import Scheduler
 
 class SchedulerSerializer(serializers.ModelSerializer):
 
-
 	class Meta:
 		model = Scheduler
 		fields = [

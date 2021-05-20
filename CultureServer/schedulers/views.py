@@ -6,21 +6,20 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import Http404
-# Create your views here.
 
 
 #프론트에서 친구 인원을 유동적으로 바꾸면 
-#선택한 사람의 데이터를 서버로 보낸다
+#선택한 사람의 데이터를 서버로 보냄
 #서버에서 잔체 인원 친구들의 스케줄을 비교해서 빈칸을 찾고 
-#그 빈칸에 대한 specificcontent model 을 시간대에 맞는 애들로 필터링해서 가져온다음
-#다시 리턴을 해준다 
+#그 빈칸에 대한 specificcontent model 을 시간대에 맞는 애들로 필터링해서 가져온 다음 다시 리턴
 
-'''자기 모든 스케줄 불러오는 view
-같이 가기 추천 view 
-add schedule 
-delete schedule 
-update schedule 
-
+'''view -> functions
+scheduleList - 완료 
+get schedule - 완료 
+add schedule - 완료 
+delete schedule - 완료 
+update schedule - 완료 
+같이 가기 추천 view - ?? 
 '''
 
 class ScheduleList(APIView):

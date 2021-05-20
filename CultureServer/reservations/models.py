@@ -10,7 +10,7 @@ class Reservation(models.Model):
 	]
 
 	reserver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reservations', verbose_name='예약자')
-	companion = models.ManyToManyField(User, blank=True)
+	companion = models.ManyToManyField(User, related_name='companion', blank=True)
 	others = models.IntegerField(null=True, blank=True)
 	specific_content = models.ForeignKey(SpecificContent, on_delete=models.CASCADE, related_name='specific_content', verbose_name='예매 컨텐츠 정보')
 	timestamp = models.DateTimeField(auto_now_add=True)

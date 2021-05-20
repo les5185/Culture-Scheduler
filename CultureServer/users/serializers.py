@@ -34,7 +34,7 @@ class UserSerializerWithToken(serializers.ModelSerializer):
 
 
 class FriendSerializer(serializers.ModelSerializer):
-	user = UserSerializer(read_only=True, many=True)
+	users = UserSerializer(read_only=True, many=True)
 
 	class Meta:
 		model = Friend

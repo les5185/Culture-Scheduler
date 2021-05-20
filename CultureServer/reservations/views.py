@@ -9,21 +9,28 @@ from django.http import Http404
 
 class ReservationList(APIView):
 	def post(self, request, format=None):
-		user = User.objects.get(username=request.query_params.get('username'))
+		user = User.objects.get(username=request.data['username'])
 		reservations = Reservation.objects.filter(reserver=user)
 		##get 은 하나만, filter 는 여러개 
 		serializer = ReservationSerializer(reservations, many=True)
 		return Response(serializer.data)
 
+
 class AddReservation(APIView):
 	def post(self, request, format=None):
 		data = request.data
 		serializer = ReservationSerializer(data=data)
+		companions = data['companion']
+		##validate을 할 때 serializer의 모든 field를 확인하는데 pop을 하면 companion 이 없어지니까 validation_error가 자꾸 뜬것....
 		if serializer.is_valid():
-			serializer.save()
+			reservation = serializer.save()
+			for companion in companions:
+			##대신 여기서 객체로 넣어주는게 맞음 
+				c = User.objects.get(pk=companion)
+				reservation.companion.add(c)
+			reservation.save()
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
-		else:
-			return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+		
 
 class ReservationDetail(APIView):
 	def get_object(self, pk):
@@ -40,7 +47,7 @@ class ReservationDetail(APIView):
 	def delete(self, request, pk, format=None):
 		reservation = self.get_object(pk)
 		reservation.delete()
-	r	eturn Response(status=status.HTTP_200_OK)
+		return Response(status=status.HTTP_200_OK)
 
 
 '''add할때 친구를 추가해서 넘겨줘야하고 delete 추가

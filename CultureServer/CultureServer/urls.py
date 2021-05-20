@@ -23,5 +23,6 @@ urlpatterns = [
     ##확인
     path('contents/', include('contents.urls')),
     path('schedulers/', include('schedulers.urls')),
+    path('reservations/', include('reservations.urls')),
     path('token-auth/', obtain_jwt_token)
 ]

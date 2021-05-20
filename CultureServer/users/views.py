@@ -24,7 +24,7 @@ def current_user(request):
 	serializer = UserSerializer(request.user)
 	return Response(serializer.data)
 
-class UserList(APIView):
+class UserList(APIView): ## 회원가입
 	"""
 	create a new user. It's called 'UserList' because normally we'd have a get method here too, for retrieving a list all User object
 	"""
@@ -37,6 +37,13 @@ class UserList(APIView):
 			serializer.save()
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
 		return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SearchUser(APIView): ##use this method to content search
+	def get(self, request, format=None):
+		results = User.objects.filter(username__icontains=request.GET['text'])
+		serializer = UserSerializer(results, many=True)
+		return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class FriendList(APIView):
@@ -52,16 +59,14 @@ class FriendList(APIView):
 
 class AddFriend(APIView):
 	def post(self, request, format=None):
+		current_user = User.objects.get(username=request.data["user"])
+		add_friend = User.objects.get(username=request.data["friend"])
 		try:
-			add_friend = User.objects.get(username=request.data["friend"])
-			current_user = User.objects.get(username=request.data["user"])
-			friend = Friend.objects.get(current_user=current_user, friend=add_friend)
-			return Response(status=status.HTTP_302_FOUND)
+			friend = Friend.objects.get(current_user=current_user)
 		except Friend.DoesNotExist:
-			serializer = FriendSerializer(data=request.data)
-			if serializer.is_valid():
-				serializer.save()
-				return Response(serializer.data, status=status.HTTP_201_CREATED)
-			else:
-				return Response(status=status.HTTP_400_BAD_REQUEST)
-		
+			friend = Friend.objects.create(current_user=current_user)
+		friend.users.add(add_friend)
+		##friend.users.remove(remove_friend)
+		friend.save()
+		serializer = FriendSerializer(friend)
+		return Response(serializer.data, status=status.HTTP_200_OK)

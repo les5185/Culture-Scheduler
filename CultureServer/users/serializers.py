@@ -5,7 +5,7 @@ from users.models import User, Friend
 class UserSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
-		fields = ('username', 'first_name', 'last_name', 'email', 'gender', 'birth', 'contact', 'preference')
+		fields = ('username', 'first_name', 'last_name', 'email', 'gender', 'birth', 'contact', 'preference_one', 'preference_two')
 
 class UserSerializerWithToken(serializers.ModelSerializer):
 	token = serializers.SerializerMethodField()
@@ -30,7 +30,7 @@ class UserSerializerWithToken(serializers.ModelSerializer):
 
 	class Meta:
 		model = User
-		fields = ('token', 'username', 'password', 'first_name', 'last_name', 'email', 'gender', 'birth', 'contact', 'preference')
+		fields = ('token', 'username', 'password', 'first_name', 'last_name', 'email', 'gender', 'birth', 'contact', 'preference_one', 'preference_two')
 
 
 class FriendSerializer(serializers.ModelSerializer):

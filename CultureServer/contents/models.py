@@ -17,7 +17,7 @@ class Content(models.Model):
 	]
 
 	title = models.CharField(max_length=30)
-	genre = models.CharField(max_length=10, choices=TYPE_OF_GENRE)  # 초이스로 바꾸기
+	genre = models.CharField(max_length=20, choices=TYPE_OF_GENRE)  # 초이스로 바꾸기
 	cast = models.CharField(max_length=30, null=True, blank=True)
 	director = models.CharField(max_length=10, null=True, blank=True)
 	location = models.CharField(max_length=10)

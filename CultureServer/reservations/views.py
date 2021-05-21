@@ -7,11 +7,20 @@ from reservations.serializers import ReservationSerializer
 from rest_framework import status
 from django.http import Http404
 
+
+'''add할때 친구를 추가해서 넘겨줘야하고 delete 추가
+#프론트에서 시간, 날짜 등 선택해서 보내주면 그걸 addreservation 에서 돌리기 
+#프론트에서 정보 넘겨주면 - 애드 로직 
+#delete reservation - 완료 
+#같이 갈 친구 추가 -> 완료 
+'''
+
+
 class ReservationList(APIView):
 	def post(self, request, format=None):
 		user = User.objects.get(username=request.data['username'])
 		reservations = Reservation.objects.filter(reserver=user)
-		##get 은 하나만, filter 는 여러개 
+		##get 은 하나만, filter 는 여러개 잊지말기
 		serializer = ReservationSerializer(reservations, many=True)
 		return Response(serializer.data)
 
@@ -48,12 +57,3 @@ class ReservationDetail(APIView):
 		reservation = self.get_object(pk)
 		reservation.delete()
 		return Response(status=status.HTTP_200_OK)
-
-
-'''add할때 친구를 추가해서 넘겨줘야하고 delete 추가
-#프론트에서 시간, 날짜 등 선택해서 보내주면 그걸 addreservation 에서 돌리기 
-#프론트에서 정보 넘겨주면 - 애드 로직 
-#delete reservation 
-#같이 갈 친구 추가 
-'''
-		

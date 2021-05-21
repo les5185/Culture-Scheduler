@@ -7,27 +7,87 @@ from contents.serializers import ContentSerializer
 from schedulers.serializers import SchedulerSerializer
 from rest_framework import status
 from django.http import Http404
+import datetime
+from django.db.models import Q
 
 
 #detailview - 완료(?)
 
-#개인스케줄 비교 
+#개인스케줄 비교 - 얘 하기 
+#취향 반영 스케줄 - filter, schedule 가져와서 비교, 필터로 가쟈온다음 데이터랑 비교해서 남는거 다 필터 -> 이거 오늘 완료하기 5/21 -> 얘하기 
+
+
 #specific content 정보 받아오는 것 
-#친구랑 스케줄 비교 
-#취향 반영 스케줄 - filter, schedule 가져와서 비교, 필터로 가쟈온다음 데이터랑 비교해서 남는거 다 필터 
+#친구랑 스케줄 비교 - 거의 완료
+
 
 #content search - 완료 
 #filter갖고 테마에 따라 보여주는것, object.filter 로직 
-'''
+
+#친구랑 스케줄 비교 로직 
+#1. 내 스케줄의 schedule list 를 전체 다 불러온다 
+#2. 친구 스케줄 schedule list 를 전체 다 불러온다 
+#3. 둘의 전체를 하나씩 다 비교한다 
+#4. 그 중 둘 다 빈칸인것 (schedule 이 없는 것)들만 비교한다 
+#5. serializer 로 결과를 바꾼두ㅏ
+#6. return Response(serializer.date...?)
+
+#Q(date__gt=datetime.date.today()) | Q(date__lt=datetime.date.today + datetime.timedelta(days=7))
+
+
 class CompareSchedule(APIView):
-	def get(self, request, format=None):
-		schedules = Schedule.objects.all()
-		serializer = ScheduleSerializer(schedules, many=True)
+	def convertToNUM(time):
+		if(time.hour == 0):
+			return (24 * 60 + time.minute) / 30	
+		return (time.hour * 60 + time.minute) / 30
+
+	def convertToTime(number):
+		datetime(hour=(number * 30 / 60), minute=(number * 30 % 60))
+		return datetime 
+
+
+	def getBlank(user, date):
+		time_set = set([])
+		total_set = set(list(range(48)))
+		schedules = Scheduler.objects.filter(user=user, date=date)
+		for schedule in schedules:
+			start_num = self.convertToNUM(schedule.start_time)
+			end_num = self.convertToNUM(schedule.end_time)
+			for i in range(int(start_num), int(end_num)):
+				time_set.add(i)
+
+		return total_set - time_set
+
+
+	def post(self, request, format=None): ##data user pk[1, 2, 3]
+		filtered_contents = []
+		dates = []
+		for i in range(3):
+			dates.append(datetime.date.today() + datetime.timedelta(days=i))
+
+		for date in dates:
+			set_array = []
+			for i in request.data.data:
+				u = User.objects.get(pk=i)
+				set_array.append(self.getBlank(u, date))
+			result = set_array[0]
+			for _set in set_array:
+				result = _set & result
+			
+
+			contents = SpecificContent.objects.filter(date=date)
+			for content in contents:
+				start_num = self.convertToNUM(content.start_time)
+				end_num = self.convertToNUM(content.end_time)
+				running = set(list(range(int(start_num), int(end_num))))
+				if (result & running) == running:
+					filtered_contents.append(content)
+			
+
+		serializer = SpecificContentSerializer(filtered_contents, many=True)
 		return Response(serializer.data)
 	
-	def save_compare(request, pk):
-		available_content = request.session.get('comparing_your_schedules', [])
-		available_content'''
+
 
 class ContentList(APIView):
 	def get(self, request, format=None):

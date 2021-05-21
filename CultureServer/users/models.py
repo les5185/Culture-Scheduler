@@ -40,8 +40,8 @@ class User(AbstractUser):
 	contact = models.CharField(verbose_name='휴대폰 번호', max_length=15)
 	birth = models.DateField(verbose_name='생년월일', blank=True, null=True)
 	gender = models.CharField(verbose_name='성별', max_length=5, choices=TYPE_OF_GENDER)
-	preference1 = models.CharField(verbose_name='취향', max_length=5, choices=TYPE_OF_PREFERENCE)
-	preference2 = models.CharField(verbose_name='취향', max_length=5, choices=TYPE_OF_PREFERENCE_2)
+	preference_one = models.CharField(verbose_name='취향1', max_length=20, choices=TYPE_OF_PREFERENCE)
+	preference_two = models.CharField(verbose_name='취향2', max_length=20, choices=TYPE_OF_PREFERENCE_2)
 	
 	
 	def __str__(self):

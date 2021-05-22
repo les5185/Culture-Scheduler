@@ -16,9 +16,8 @@ from django.db.models import Q
 #개인스케줄 비교 - 얘 하기 
 #취향 반영 스케줄 - filter, schedule 가져와서 비교, 필터로 가쟈온다음 데이터랑 비교해서 남는거 다 필터 -> 이거 오늘 완료하기 5/21 -> 얘하기 
 
-
 #specific content 정보 받아오는 것 
-#친구랑 스케줄 비교 - 거의 완료
+#친구랑 스케줄 비교 - 거의 완료...! 이 부분 마무리 하기 
 
 
 #content search - 완료 

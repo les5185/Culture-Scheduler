@@ -11,10 +11,40 @@ class Content(models.Model):
 	TYPE_OF_GENRE = [
 		(EXHIBITION, '전시회'),
 		(LECTURE, '강연'),
-		(CONCERT, '영화'),
+		(CONCERT, '공연예술'),
 		(CULTURE_EVENT, '문화행사'),
 		(SPORTS, '스포츠'),
 	]
+##content 에 키워드 추가 
+	TYPE_OF_PREFERENCE = (
+		('유쾌한', '유쾌한'),
+		('감동적인', '감동적인'),
+		('스릴있는', '스릴있는'),
+		('어두운', '어두운'),
+		('힐링', '힐링'),
+		('설레는', '설레는'),
+		('잔잔한', '잔잔한'),
+		('역동적인', '역동적인'),
+		('유익한', '유익한'),
+		('사진 찍기 좋은', '사진 찍기 좋은'),
+		('장르물', '장르물'),
+		('온택트', '온택트'),
+	)
+
+	TYPE_OF_PREFERENCE_2 = (
+		('유쾌한', '유쾌한'),
+		('감동적인', '감동적인'),
+		('스릴있는', '스릴있는'),
+		('어두운', '어두운'),
+		('힐링', '힐링'),
+		('설레는', '설레는'),
+		('잔잔한', '잔잔한'),
+		('역동적인', '역동적인'),
+		('유익한', '유익한'),
+		('사진 찍기 좋은', '사진 찍기 좋은'),
+		('장르물', '장르물'),
+		('온택트', '온택트'),
+	)
 
 	title = models.CharField(max_length=30)
 	genre = models.CharField(max_length=20, choices=TYPE_OF_GENRE)  # 초이스로 바꾸기
@@ -24,6 +54,9 @@ class Content(models.Model):
 	plot = models.CharField(max_length=200)
 	image = models.ImageField(null=True, blank=True, upload_to='images')
 	rate = models.IntegerField()
+	preference_one = models.CharField(max_length=20, choices=TYPE_OF_PREFERENCE)
+	preference_two = models.CharField( max_length=20, choices=TYPE_OF_PREFERENCE_2)
+	
 
 	def __str__(self):
 		return self.title

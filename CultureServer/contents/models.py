@@ -9,7 +9,7 @@ class Content(models.Model):
 	SPORTS = 'SPORTS'
 
 	TYPE_OF_GENRE = [
-		(EXHIBITION, '전시회'),
+		(EXHIBITION, '전시'),
 		(LECTURE, '강연'),
 		(CONCERT, '공연예술'),
 		(CULTURE_EVENT, '문화행사'),

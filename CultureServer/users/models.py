@@ -6,7 +6,7 @@ class User(AbstractUser):
 		('남성', '남성'),
 		('여성', '여성'),
 	)
-
+	
 	TYPE_OF_PREFERENCE = (
 		('유쾌한', '유쾌한'),
 		('감동적인', '감동적인'),

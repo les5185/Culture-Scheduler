@@ -89,7 +89,7 @@ REST_FRAMEWORK = {
 
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:8000',
-    'http://tiffany3123.pythonanywhere.com'
+    'http://localhost:3000'
 )
 
 JWT_AUTH = {

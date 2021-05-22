@@ -149,7 +149,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = '/home/tiffany3123/Culture-Scheduler/CultureServer/'
+STATIC_ROOT = '/home/tiffany3123/Culture-Scheduler/CultureServer/rest_framework/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

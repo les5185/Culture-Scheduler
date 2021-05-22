@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-ai)f4y+ebmq5v@(1jjarnm@gm_#c76pj99wali_^ni3u(sc=al
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'tiffany3123.pythonanywhere.com/',
+]
 
 
 # Application definition
@@ -87,6 +89,7 @@ REST_FRAMEWORK = {
 
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:8000',
+    'http://tiffany3123.pythonanywhere.com'
 )
 
 JWT_AUTH = {

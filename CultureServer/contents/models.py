@@ -47,15 +47,15 @@ class Content(models.Model):
 	)
 
 	title = models.CharField(max_length=30)
-	genre = models.CharField(max_length=20, choices=TYPE_OF_GENRE)  # 초이스로 바꾸기
+	genre = models.CharField(max_length=20, choices=TYPE_OF_GENRE)  
 	cast = models.CharField(max_length=30, null=True, blank=True)
 	director = models.CharField(max_length=10, null=True, blank=True)
 	location = models.CharField(max_length=10)
 	plot = models.CharField(max_length=200)
 	image = models.ImageField(null=True, blank=True, upload_to='images')
 	rate = models.IntegerField()
-	preference_one = models.CharField(max_length=20, choices=TYPE_OF_PREFERENCE)
-	preference_two = models.CharField( max_length=20, choices=TYPE_OF_PREFERENCE_2)
+	preference_one = models.CharField(max_length=20, choices=TYPE_OF_PREFERENCE, null=True)
+	preference_two = models.CharField( max_length=20, choices=TYPE_OF_PREFERENCE_2, null=True)
 	
 
 	def __str__(self):

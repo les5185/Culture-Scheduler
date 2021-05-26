@@ -2,9 +2,22 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
+	EXHIBITION = 'EXHIBITION'
+	LECTURE = 'LECTURE'
+	CONCERT = 'CONCERT'
+	CULTURE_EVENT = 'CULTURE_EVENT'
+	SPORTS = 'SPORTS'
+	
 	TYPE_OF_GENDER = (
 		('남성', '남성'),
 		('여성', '여성'),
+	)
+	TYPE_OF_GENRE = (
+		(EXHIBITION, '전시'),
+		(LECTURE, '강연'),
+		(CONCERT, '공연예술'),
+		(CULTURE_EVENT, '문화행사'),
+		(SPORTS, '스포츠'),
 	)
 	
 	TYPE_OF_PREFERENCE = (
@@ -40,6 +53,7 @@ class User(AbstractUser):
 	contact = models.CharField(verbose_name='휴대폰 번호', max_length=15)
 	birth = models.DateField(verbose_name='생년월일', blank=True, null=True)
 	gender = models.CharField(verbose_name='성별', max_length=5, choices=TYPE_OF_GENDER)
+	genre = models.CharField(max_length=20, choices=TYPE_OF_GENRE, null=True) 
 	preference_one = models.CharField(verbose_name='취향1', max_length=20, choices=TYPE_OF_PREFERENCE)
 	preference_two = models.CharField(verbose_name='취향2', max_length=20, choices=TYPE_OF_PREFERENCE_2)
 	

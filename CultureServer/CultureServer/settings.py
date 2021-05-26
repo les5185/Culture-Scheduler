@@ -26,6 +26,7 @@ SECRET_KEY = 'django-insecure-ai)f4y+ebmq5v@(1jjarnm@gm_#c76pj99wali_^ni3u(sc=al
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    '127.0.0.1',
     'tiffany3123.pythonanywhere.com',
 ]
 
@@ -88,7 +89,7 @@ REST_FRAMEWORK = {
 }
 
 CORS_ORIGIN_WHITELIST = (
-    'http://localhost:8000',
+    'http://127.0.0.1:8000',
     'http://localhost:3000'
 )
 

@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
-from contents.models import Content
+from contents.models import Content, SpecificContent
 from schedulers.models import Scheduler
+from users.models import User
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from contents.serializers import ContentSerializer
+from contents.serializers import ContentSerializer, SpecificContentsSerializer
 from schedulers.serializers import SchedulerSerializer
 from rest_framework import status
 from django.http import Http404
@@ -11,17 +12,14 @@ import datetime
 from django.db.models import Q
 
 
-#detailview - 완료(?)
+#개인스케줄 비교 - 얘만 하면 진짜 끝!!!
 
-#개인스케줄 비교 - 얘 하기 
-#취향 반영 스케줄 - filter, schedule 가져와서 비교, 필터로 가쟈온다음 데이터랑 비교해서 남는거 다 필터 -> 이거 오늘 완료하기 5/21 -> 얘하기 
-
+#취향 반영 스케줄 - filter, schedule 가져와서 비교, 필터로 가쟈온다음 데이터랑 비교해서 남는거 다 필터 -> 완료 
 #specific content 정보 받아오는 것 
 #친구랑 스케줄 비교 - 거의 완료...! 이 부분 마무리 하기 
-
-
 #content search - 완료 
 #filter갖고 테마에 따라 보여주는것, object.filter 로직 
+#detailview - 완료(?)
 
 #친구랑 스케줄 비교 로직 
 #1. 내 스케줄의 schedule list 를 전체 다 불러온다 
@@ -35,17 +33,17 @@ from django.db.models import Q
 
 
 class CompareSchedule(APIView):
-	def convertToNUM(time):
+	def convertToNUM(self, time):
 		if(time.hour == 0):
 			return (24 * 60 + time.minute) / 30	
 		return (time.hour * 60 + time.minute) / 30
 
-	def convertToTime(number):
+	def convertToTime(self, number):
 		datetime(hour=(number * 30 / 60), minute=(number * 30 % 60))
 		return datetime 
 
 
-	def getBlank(user, date):
+	def getBlank(self, user, date):
 		time_set = set([])
 		total_set = set(list(range(48)))
 		schedules = Scheduler.objects.filter(user=user, date=date)
@@ -54,6 +52,7 @@ class CompareSchedule(APIView):
 			end_num = self.convertToNUM(schedule.end_time)
 			for i in range(int(start_num), int(end_num)):
 				time_set.add(i)
+		print("blank: ", total_set - time_set)
 
 		return total_set - time_set
 
@@ -66,12 +65,15 @@ class CompareSchedule(APIView):
 
 		for date in dates:
 			set_array = []
-			for i in request.data.data:
+			for i in request.data["data"]:
 				u = User.objects.get(pk=i)
+				print(u)
 				set_array.append(self.getBlank(u, date))
 			result = set_array[0]
 			for _set in set_array:
 				result = _set & result
+			
+			print("result: ", result)
 			
 
 			contents = SpecificContent.objects.filter(date=date)
@@ -79,11 +81,11 @@ class CompareSchedule(APIView):
 				start_num = self.convertToNUM(content.start_time)
 				end_num = self.convertToNUM(content.end_time)
 				running = set(list(range(int(start_num), int(end_num))))
+				print("running: ", running)
 				if (result & running) == running:
 					filtered_contents.append(content)
-			
 
-		serializer = SpecificContentSerializer(filtered_contents, many=True)
+		serializer = SpecificContentsSerializer(filtered_contents, many=True)
 		return Response(serializer.data)
 	
 
@@ -111,13 +113,20 @@ class AddContent(APIView):
 			return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 #filter by cateogry 확인 
-class ContentCategory(APIView):
-	serializer_class = ContentSerializer
+class getContentByGenre(APIView):
+	def post(self, request, format=None):
+		contents = Content.objects.filter(genre=request.data["genre"])
+		serializer = ContentSerializer(contents, many=True)
+		return Response(serializer.data, status=status.HTTP_200_OK)
 
-	def get_queryset(self):
-		category = self.request.query_params.get('category')
-		return Content.objects.filter(genre__parent__category=category)
-	
+		
+class getContentByPreference(APIView):
+	def post(self, request, format=None):
+		user = User.objects.get(pk=request.data["user"])
+		contents = Content.objects.filter((Q(preference_one=user.preference_one) | Q(preference_two=user.preference_two) | Q(preference_one=user.preference_two) | Q(preference_two=user.preference_one)) & Q(genre=user.genre))
+		serializer = ContentSerializer(contents, many=True)
+		return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class SearchContent(APIView):
 	def get(self, request, format=None):

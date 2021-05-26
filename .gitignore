@@ -22,7 +22,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-/django
-/__pycache__
+django
+__pycache__
 
 db.sqlite3

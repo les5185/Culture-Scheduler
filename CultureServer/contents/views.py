@@ -12,8 +12,7 @@ import datetime
 from django.db.models import Q
 
 
-#개인스케줄 비교 - 얘만 하면 진짜 끝!!!
-
+#개인스케줄 비교 - 완료 
 #취향 반영 스케줄 - filter, schedule 가져와서 비교, 필터로 가쟈온다음 데이터랑 비교해서 남는거 다 필터 -> 완료 
 #specific content 정보 받아오는 것 
 #친구랑 스케줄 비교 - 거의 완료...! 이 부분 마무리 하기 
@@ -32,7 +31,8 @@ from django.db.models import Q
 #Q(date__gt=datetime.date.today()) | Q(date__lt=datetime.date.today + datetime.timedelta(days=7))
 
 
-class CompareSchedule(APIView):
+#나랑 콘텐츠 스케줄 비교로 수정하기 
+class CompareIndivdualSchedule(APIView): #개인 스케줄 - 콘텐츠 스케줄 비교 
 	def convertToNUM(self, time):
 		if(time.hour == 0):
 			return (24 * 60 + time.minute) / 30	
@@ -60,7 +60,57 @@ class CompareSchedule(APIView):
 	def post(self, request, format=None): ##data user pk[1, 2, 3]
 		filtered_contents = []
 		dates = []
-		for i in range(3):
+		for i in range(7):
+			dates.append(datetime.date.today() + datetime.timedelta(days=i))
+
+		for date in dates:
+			u = User.objects.get(pk=request.data["data"])
+			print(u)
+			result = self.getBlank(u, date)
+			print("result: ", result)
+			
+			contents = SpecificContent.objects.filter(date=date)
+			for content in contents:
+				start_num = self.convertToNUM(content.start_time)
+				end_num = self.convertToNUM(content.end_time)
+				running = set(list(range(int(start_num), int(end_num))))
+				print("running: ", running)
+				if (result & running) == running:
+					filtered_contents.append(content)
+
+		serializer = SpecificContentsSerializer(filtered_contents, many=True)
+		return Response(serializer.data)
+
+
+class CompareSchedule(APIView): #개인 스케줄 & 친구 스케줄 & 콘텐츠 스케줄 비교
+	def convertToNUM(self, time):
+		if(time.hour == 0):
+			return (24 * 60 + time.minute) / 30	
+		return (time.hour * 60 + time.minute) / 30
+
+	def convertToTime(self, number):
+		datetime(hour=(number * 30 / 60), minute=(number * 30 % 60))
+		return datetime 
+
+
+	def getBlank(self, user, date):
+		time_set = set([])
+		total_set = set(list(range(48)))
+		schedules = Scheduler.objects.filter(user=user, date=date)
+		for schedule in schedules:
+			start_num = self.convertToNUM(schedule.start_time)
+			end_num = self.convertToNUM(schedule.end_time)
+			for i in range(int(start_num), int(end_num)):
+				time_set.add(i)
+		print("blank: ", total_set - time_set)
+
+		return total_set - time_set
+
+
+	def post(self, request, format=None): ##data user pk[1, 2, 3]
+		filtered_contents = []
+		dates = []
+		for i in range(7):
 			dates.append(datetime.date.today() + datetime.timedelta(days=i))
 
 		for date in dates:

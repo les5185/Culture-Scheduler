@@ -19,7 +19,6 @@ get schedule - 완료
 add schedule - 완료 
 delete schedule - 완료 
 update schedule - 완료 
-같이 가기 추천 view - ??
 '''
 
 class ScheduleList(APIView):

@@ -4,7 +4,7 @@ from schedulers.models import Scheduler
 # Register your models here.
 class SchedulerAdmin(admin.ModelAdmin):
 	model = Scheduler
-	list_display = ('user', 'title', 'date', 'start_time', 'end_time')
+	list_display = ('user', 'title', 'startDate', 'endDate')
 
 
 admin.site.register(Scheduler, SchedulerAdmin)

@@ -9,10 +9,9 @@ class SchedulerSerializer(serializers.ModelSerializer):
 		fields = [
 			'pk',
 			'user',
-			'date',
-			'start_time',
-			'end_time',
+			'startDate',
+			'endDate',
 			'title',
-			'info',
+			'notes',
 			'location'
 		]

@@ -53,7 +53,7 @@ class SearchUser(APIView):
 class FriendList(APIView):
 	def post(self, request, format=None):
 		current_user = User.objects.get(username=request.data["user"])
-		friend = Friend.objects.filter(current_user=current_user)
+		friend = Friend.objects.get(current_user=current_user)
 		friends = friend.users.all()
 		serializer = UserSerializer(friends, many=True)
 		return Response(serializer.data, status=status.HTTP_200_OK)

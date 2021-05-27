@@ -95,7 +95,8 @@ CORS_ORIGIN_WHITELIST = (
 
 JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER': 'CultureServer.utils.my_jwt_response_handler',
-    'JWT_ALLOW_REFRESH': False
+    'JWT_ALLOW_REFRESH': False,
+    'JWT_VERIFY_EXPIRATION': False
 }
 
 WSGI_APPLICATION = 'CultureServer.wsgi.application'

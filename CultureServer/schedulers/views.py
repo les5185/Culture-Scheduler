@@ -52,6 +52,8 @@ class AddSchedule(APIView):
 			serializer.save()
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
 		else:
+			print(serializer.errors)
+			print(serializer.validated_data)
 			return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class ScheduleDetail(APIView):

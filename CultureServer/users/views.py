@@ -49,16 +49,15 @@ class SearchUser(APIView):
 		return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class FriendList(APIView):
-	def get(self, request, format=None):
-		friends = Friend.objects.all()
-		serializer = FriendSerializer(friends, many=True)
-		return Response(serializer.data, status=status.HTTP_200_OK)
 
-	def put(self, request, format=None):
-		friends = Friend.objects.all()
-		serializer = FriendSerializer(friends, many=True)
+class FriendList(APIView):
+	def post(self, request, format=None):
+		current_user = User.objects.get(username=request.data["user"])
+		friend = Friend.objects.filter(current_user=current_user)
+		friends = Friend.users.all()
+		serializer = UserSerializer(friends, many=True)
 		return Response(serializer.data, status=status.HTTP_200_OK)
+		
 
 class AddFriend(APIView):
 	def post(self, request, format=None):

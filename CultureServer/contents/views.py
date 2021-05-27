@@ -3,6 +3,7 @@ from contents.models import Content, SpecificContent
 from schedulers.models import Scheduler
 from users.models import User
 from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from contents.serializers import ContentSerializer, SpecificContentsSerializer
 from schedulers.serializers import SchedulerSerializer
@@ -141,6 +142,8 @@ class CompareSchedule(APIView): #개인 스케줄 & 친구 스케줄 & 콘텐츠
 
 
 class ContentList(APIView):
+	permission_classes = [AllowAny]
+	
 	def get(self, request, format=None):
 		contents = Content.objects.all() 
 		##데이터베이스(엑셀 테이블)에서 데이터를 가져온 것. 

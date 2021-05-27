@@ -11,7 +11,7 @@ class Scheduler(models.Model):
 	location = models.CharField(max_length=8)
 	
 	def __str__(self):
-		return str(self.user) + "님의 스케줄: " + str(self.date)
+            return str(self.user) + "님의 스케줄: " + str(self.title)
 
 
 

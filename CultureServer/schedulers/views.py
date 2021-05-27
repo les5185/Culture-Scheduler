@@ -28,8 +28,8 @@ class ScheduleList(APIView):
 		user = User.objects.get(username=request.data['username'])
 		schedules = Scheduler.objects.filter(user=user)
 		for schedule in schedules:
-			schedule.startDate = self.add_months(schedule.startDate, 1)
-			schedule.endDate = self.add_months(schedule.endDate, 1) 
+			schedule.startDate = self.add_months(schedule.startDate, -1)
+			schedule.endDate = self.add_months(schedule.endDate, -1) 
 		serializer = SchedulerSerializer(schedules, many=True)
 		return Response(serializer.data)
 	

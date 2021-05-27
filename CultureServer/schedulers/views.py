@@ -6,6 +6,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import Http404
+import datetime 
+import calendar 
 
 
 #프론트에서 친구 인원을 유동적으로 바꾸면 
@@ -25,8 +27,21 @@ class ScheduleList(APIView):
 	def post(self, request, format=None):
 		user = User.objects.get(username=request.data['username'])
 		schedules = Scheduler.objects.filter(user=user)
+		for schedule in schedules:
+			schedule.startDate = self.add_months(schedule.startDate, 1)
+			schedule.endDate = self.add_months(schedule.endDate, 1) 
 		serializer = SchedulerSerializer(schedules, many=True)
 		return Response(serializer.data)
+	
+	def add_months(self, sourcedate, months):
+		month = sourcedate.month - 1 + months
+		year = sourcedate.year + month // 12
+		month = month % 12 + 1
+		day = min(sourcedate.day, calendar.monthrange(year,month)[1])
+		hour = sourcedate.hour
+		minute = sourcedate.minute
+		second = sourcedate.second
+		return datetime.datetime(year, month, day, hour, minute, second)
 
 
 class AddSchedule(APIView):

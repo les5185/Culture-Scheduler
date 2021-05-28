@@ -18,6 +18,8 @@ class ContentSerializer(serializers.HyperlinkedModelSerializer):
 		]
 
 class SpecificContentsSerializer(serializers.ModelSerializer):
+	content = ContentSerializer()
+	
 	class Meta:
 		model = SpecificContent
 		fields = [

@@ -62,7 +62,7 @@ class CompareIndivdualSchedule(APIView): #개인 스케줄 - 콘텐츠 스케줄
 		filtered_contents = []
 		dates = []
 		for i in range(7):
-			dates.append(datetime.date.today() + datetime.timedelta(days=i))
+			dates.append(datetime.datetime.today() + datetime.timedelta(days=i))
 
 		for date in dates:
 			print(date)

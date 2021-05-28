@@ -178,7 +178,7 @@ class getContentByGenre(APIView):
 class getContentByPreference(APIView):
 	def post(self, request, format=None):
 		user = User.objects.get(pk=request.data["user"])
-		contents = Content.objects.filter((Q(preference_one=user.preference_one) | Q(preference_two=user.preference_two) | Q(preference_one=user.preference_two) | Q(preference_two=user.preference_one)) & Q(genre=user.genre))
+		contents = Content.objects.filter(Q(preference_one=user.preference_one) | Q(preference_two=user.preference_two) | Q(preference_one=user.preference_two) | Q(preference_two=user.preference_one))
 		serializer = ContentSerializer(contents, many=True)
 		return Response(serializer.data, status=status.HTTP_200_OK)
 

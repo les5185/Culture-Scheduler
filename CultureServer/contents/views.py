@@ -97,7 +97,7 @@ class CompareSchedule(APIView): #개인 스케줄 & 친구 스케줄 & 콘텐츠
 	def getBlank(self, user, date):
 		time_set = set([])
 		total_set = set(list(range(48)))
-		schedules = Scheduler.objects.filter(user=user, date=date)
+		schedules = Scheduler.objects.filter(user=user, startDate=date)
 		for schedule in schedules:
 			start_num = self.convertToNUM(schedule.startDate)
 			end_num = self.convertToNUM(schedule.endDate)

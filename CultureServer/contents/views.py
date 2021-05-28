@@ -116,6 +116,7 @@ class CompareSchedule(APIView): #개인 스케줄 & 친구 스케줄 & 콘텐츠
 
 		for date in dates:
 			set_array = []
+			print(date)
 			for i in request.data["data"]:
 				u = User.objects.get(pk=i)
 				print(u)

@@ -65,6 +65,7 @@ class CompareIndivdualSchedule(APIView): #개인 스케줄 - 콘텐츠 스케줄
 			dates.append(datetime.date.today() + datetime.timedelta(days=i))
 
 		for date in dates:
+			print(date)
 			u = User.objects.get(pk=request.data["data"])
 			print(u)
 			result = self.getBlank(u, date)

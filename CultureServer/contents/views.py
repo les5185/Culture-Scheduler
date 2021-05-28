@@ -184,6 +184,8 @@ class getContentByPreference(APIView):
 
 
 class SearchContent(APIView):
+	permission_classes = [AllowAny]
+
 	def get(self, request, format=None):
 		results = Content.objects.filter(title__icontains=request.GET['text'])
 		serializer = ContentSerializer(results, many=True)

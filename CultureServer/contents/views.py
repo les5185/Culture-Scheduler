@@ -47,10 +47,10 @@ class CompareIndivdualSchedule(APIView): #개인 스케줄 - 콘텐츠 스케줄
 	def getBlank(self, user, date):
 		time_set = set([])
 		total_set = set(list(range(48)))
-		schedules = Scheduler.objects.filter(user=user, date=date)
+		schedules = Scheduler.objects.filter(user=user, startDate=date)
 		for schedule in schedules:
-			start_num = self.convertToNUM(schedule.start_time)
-			end_num = self.convertToNUM(schedule.end_time)
+			start_num = self.convertToNUM(schedule.startDate)
+			end_num = self.convertToNUM(schedule.endDate)
 			for i in range(int(start_num), int(end_num)):
 				time_set.add(i)
 		print("blank: ", total_set - time_set)
@@ -99,8 +99,8 @@ class CompareSchedule(APIView): #개인 스케줄 & 친구 스케줄 & 콘텐츠
 		total_set = set(list(range(48)))
 		schedules = Scheduler.objects.filter(user=user, date=date)
 		for schedule in schedules:
-			start_num = self.convertToNUM(schedule.start_time)
-			end_num = self.convertToNUM(schedule.end_time)
+			start_num = self.convertToNUM(schedule.startDate)
+			end_num = self.convertToNUM(schedule.endDate)
 			for i in range(int(start_num), int(end_num)):
 				time_set.add(i)
 		print("blank: ", total_set - time_set)
